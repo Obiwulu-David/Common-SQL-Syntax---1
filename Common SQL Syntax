@@ -1,0 +1,36 @@
+select * from customer_form
+where not gender = 'Male'
+and age < 25
+
+--find the average salary of all professions
+select to_char(Avg(annual_salary), '9,999,999,999') as average_salary, profession
+from customer_form
+where age > 40
+group by profession
+order by average_salary desc;
+
+--provide the data of people in engineering, healthcare, lawyer and artist
+select * from customer_form
+where profession in('Healthcare','Engineer', 'Lawyer', 'Artist')
+
+--group age
+select case
+		when age between 0 and 20 then '0 - 20'
+		when age between 21 and 40 then '21 - 40'
+		when age between 41 and 60 then '41 - 60'
+		when age between 61 and 80 then '61 - 80'
+		else 'above 80' end as age_group,
+		to_char (count(*), '9,999,999') as count_of_people
+from customer_form
+group by age
+order by count_of_people desc
+limit 15
+
+--find the number of individual by gender in the following profession:
+--Healthcare, Engineer, Lawyer
+select gender,
+sum(case when profession = 'Healthcare' then 1 else 0 end) Healthcare,
+sum(case when profession = 'Engineer' then 1 else 0 end) Engineer,
+sum(case when profession = 'Lawyer' then 1 else 0 end) Lawyer
+from customer_form
+group by gender;
